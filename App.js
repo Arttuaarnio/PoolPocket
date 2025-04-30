@@ -52,11 +52,11 @@ const AppTabs = () => (
         }
         return <Icon name={iconName} size={size} color={color} />;
       },
-      tabBarActiveTintColor: "#2196F3",
+      tabBarActiveTintColor: "#006F44",
       tabBarInactiveTintColor: "gray",
     })}
   >
-    <Tab.Screen name="Home" component={Home} /> 
+    <Tab.Screen name="Home" component={Home} />
     <Tab.Screen name="Maps" component={Maps} />
     <Tab.Screen name="Favorites" component={Favorites} />
     <Tab.Screen name="Chatbot" component={Chatbot} />

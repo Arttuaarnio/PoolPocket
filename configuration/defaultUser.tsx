@@ -1,7 +1,6 @@
 import React from "react";
 
 export const defaultUserData = {
-  firstName: "",
-  lastName: "",
+  username: "",
   email: "",
 };

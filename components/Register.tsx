@@ -3,17 +3,15 @@ import {
   Text,
   View,
   TextInput,
-  Button,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { useState } from "react";
 import { getDatabase, ref, set } from "firebase/database";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-
-const auth = getAuth();
-const database = getDatabase();
 
 export default function Register({ navigation }) {
   const [email, setEmail] = useState("");
@@ -21,6 +19,9 @@ export default function Register({ navigation }) {
   const [username, setUsername] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const auth = getAuth();
+  const database = getDatabase();
 
   const validatePassword = (password) => {
     if (password.length < 8) {
@@ -70,20 +71,18 @@ export default function Register({ navigation }) {
       await set(ref(database, `users/${user.uid}`), {
         username: username,
         email: email,
-        
       });
 
       setEmail("");
       setPassword("");
       setUsername("");
       setPasswordError("");
-      Alert.alert("Registering succesful!");
+      Alert.alert("Success", "Registration successful!");
 
-      // Navigoidaan login-näkymään
+      // Navigate to login screen
       navigation.navigate("Login");
     } catch (error) {
-      setLoading(false);
-      Alert.alert("Registering failed!", error.message);
+      Alert.alert("Registration Failed", error.message);
     } finally {
       setLoading(false);
     }
@@ -92,48 +91,77 @@ export default function Register({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <Text style={styles.title}>Register</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          value={username}
-          onChangeText={setUsername}
-          editable={!loading}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          keyboardType="email-address"
-          editable={!loading}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={handlePasswordChange}
-          secureTextEntry
-          editable={!loading}
-        />
-        {passwordError ? (
-          <Text style={styles.errorText}>{passwordError}</Text>
-        ) : null}
-        <Text style={styles.passwordHint}>
-          Password must be at least 8 characters long, contain an uppercase letter, a number, and a special character.
-        </Text>
-        <Button
-          title={loading ? "Registering" : "Register"}
-          onPress={handleRegister}
-          disabled={loading}
-        />
-        <Text
-          style={styles.link}
-          onPress={() => navigation && navigation.navigate("Login")}
-        >
-          Already have an account? Log in here
-        </Text>
+        <View style={styles.formContainer}>
+          <Text style={styles.headerTitle}>Create Account</Text>
+          <Text style={styles.subtitle}>Join the PoolPocket community</Text>
+
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              value={username}
+              onChangeText={setUsername}
+              editable={!loading}
+              placeholderTextColor="#888"
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              editable={!loading}
+              placeholderTextColor="#888"
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={password}
+              onChangeText={handlePasswordChange}
+              secureTextEntry
+              editable={!loading}
+              placeholderTextColor="#888"
+            />
+          </View>
+
+          {passwordError ? (
+            <Text style={styles.errorText}>{passwordError}</Text>
+          ) : null}
+
+          <Text style={styles.passwordHint}>
+            Password must be at least 8 characters long, contain an uppercase
+            letter, a number, and a special character.
+          </Text>
+
+          <TouchableOpacity
+            style={styles.sendButton}
+            onPress={handleRegister}
+            disabled={loading}
+          >
+            {loading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="small" color="white" />
+                <Text style={styles.sendButtonText}>Creating account...</Text>
+              </View>
+            ) : (
+              <Text style={styles.sendButtonText}>Register</Text>
+            )}
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <Text style={styles.link}>
+              Already have an account?{" "}
+              <Text style={styles.linkBold}>Sign in here</Text>
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -142,38 +170,81 @@ export default function Register({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f5f5f5",
     alignItems: "center",
     justifyContent: "center",
+    padding: 20,
   },
-  title: {
+  formContainer: {
+    width: "100%",
+    maxWidth: 400,
+    backgroundColor: "white",
+    borderRadius: 16,
+    padding: 24,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  headerTitle: {
     fontSize: 24,
-    marginBottom: 20,
+    fontWeight: "bold",
+    marginBottom: 8,
+    color: "#333",
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 24,
+  },
+  inputContainer: {
+    marginBottom: 16,
   },
   input: {
-    width: 300,
-    height: 40,
-    borderColor: "gray",
+    backgroundColor: "#F5F5F5",
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontSize: 16,
     borderWidth: 1,
-    marginBottom: 10,
-    padding: 10,
-    borderRadius: 5,
+    borderColor: "#E0E0E0",
   },
   errorText: {
-    color: "red",
+    color: "#D32F2F",
     marginBottom: 10,
-    textAlign: "center",
-    width: 300,
+    fontSize: 14,
   },
   passwordHint: {
     fontSize: 12,
-    color: "gray",
-    marginBottom: 15,
-    textAlign: "center",
-    width: 300,
+    color: "#666",
+    marginBottom: 24,
+  },
+  sendButton: {
+    backgroundColor: "#006F44",
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: "center",
+    marginTop: 8,
+  },
+  sendButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  loadingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   link: {
-    marginTop: 20,
-    color: "blue",
+    marginTop: 24,
+    textAlign: "center",
+    color: "#666",
+    fontSize: 15,
+  },
+  linkBold: {
+    color: "#006F44",
+    fontWeight: "bold",
   },
 });

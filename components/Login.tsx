@@ -3,10 +3,11 @@ import {
   Text,
   View,
   TextInput,
-  Button,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -15,17 +16,14 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const auth = getAuth(); 
+  const auth = getAuth();
 
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert("Error", "Please enter email and password");
       return;
     }
-
     setLoading(true);
-
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -33,14 +31,11 @@ export default function Login({ navigation }) {
         password
       );
       const user = userCredential.user;
-
       setEmail("");
       setPassword("");
-
-      Alert.alert("Success", "Logged in successfully!");
-
+      Alert.alert("Success", "Signed in successfully!");
     } catch (error) {
-      Alert.alert("Login Failed", error.message);
+      Alert.alert("Sign in Failed", error.message);
     } finally {
       setLoading(false);
     }
@@ -49,35 +44,55 @@ export default function Login({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <Text style={styles.title}>Log in</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          keyboardType="email-address"
-          editable={!loading}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          editable={!loading}
-        />
-        <Button
-          title={loading ? "Logging in..." : "Log In"}
-          onPress={handleLogin}
-          disabled={loading}
-        />
-        <Text
-          style={styles.link}
-          onPress={() => navigation.navigate("Register")}
-        >
-          No account? Register here
-        </Text>
+        <View style={styles.formContainer}>
+          <Text style={styles.headerTitle}>Welcome to PoolPocket</Text>
+          <Text style={styles.subtitle}>Sign in to continue</Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              editable={!loading}
+              placeholderTextColor="#888"
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              editable={!loading}
+              placeholderTextColor="#888"
+            />
+          </View>
+
+          <TouchableOpacity
+            style={styles.sendButton}
+            onPress={handleLogin}
+            disabled={loading}
+          >
+            {loading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="small" color="white" />
+                <Text style={styles.sendButtonText}>Signing in...</Text>
+              </View>
+            ) : (
+              <Text style={styles.sendButtonText}>Sign In</Text>
+            )}
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+            <Text style={styles.link}>
+              No account? <Text style={styles.linkBold}>Register here</Text>
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -86,25 +101,81 @@ export default function Login({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f5f5f5",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+  },
+  formContainer: {
+    width: "100%",
+    maxWidth: 400,
+    backgroundColor: "white",
+    borderRadius: 16,
+    padding: 24,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 8,
+    color: "#333",
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 24,
+  },
+  inputContainer: {
+    marginBottom: 16,
+  },
+  input: {
+    backgroundColor: "#F5F5F5",
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+  },
+  errorText: {
+    color: "#D32F2F",
+    marginBottom: 10,
+    fontSize: 14,
+  },
+  passwordHint: {
+    fontSize: 12,
+    color: "#666",
+    marginBottom: 24,
+  },
+  sendButton: {
+    backgroundColor: "#006F44",
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: "center",
+    marginTop: 8,
+  },
+  sendButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  loadingContainer: {
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
   },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-  },
-  input: {
-    width: 300,
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    marginBottom: 10,
-    borderRadius: 5,
-    padding: 10,
-  },
   link: {
-    marginTop: 10,
-    color: "blue",
+    marginTop: 24,
+    textAlign: "center",
+    color: "#666",
+    fontSize: 15,
+  },
+  linkBold: {
+    color: "#006F44",
+    fontWeight: "bold",
   },
 });

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { ref, get, set } from "firebase/database";
-import { auth, database } from "./firebaseConfig"; // <-- Correct imports
+import { auth, database } from "./firebaseConfig";
 import { defaultUserData } from "./defaultUser";
 
 const useCurrentUser = () => {

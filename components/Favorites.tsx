@@ -40,7 +40,7 @@ const Favorites = ({ navigation }) => {
     );
     remove(favoriteRef)
       .then(() => {
-        Alert.alert("Favorite Deleted!");
+        Alert.alert("Success!", "Favorite Deleted!");
       })
       .catch(() => {
         Alert.alert("Error", "Failed to delete. Please try again.");

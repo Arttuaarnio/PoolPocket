@@ -73,13 +73,13 @@ poolpocket/
 
 ## Screenshots
 
-<img src="https://github.com/Arttuaarnio/PoolPocket/tree/main/images/login.png?raw=true" width="300" />
-<img src="https://github.com/Arttuaarnio/PoolPocket/tree/main/images/register.png?raw=true" width="300" />
-<img src="https://github.com/Arttuaarnio/PoolPocket/tree/main/images/home.png?raw=true" width="300" />
-<img src="https://github.com/Arttuaarnio/PoolPocket/tree/main/images/maps.png?raw=true" width="300" />
-<img src="https://github.com/Arttuaarnio/PoolPocket/tree/main/images/favorites.png?raw=true" width="300" />
-<img src="https://github.com/Arttuaarnio/PoolPocket/tree/main/images/chatbot.png?raw=true" width="300" />
-<img src="https://github.com/Arttuaarnio/PoolPocket/tree/main/images/profile.png?raw=true" width="300" />
+<img src="https://github.com/Arttuaarnio/PoolPocket/blob/main/images/login.png?raw=true" width="300" />
+<img src="https://github.com/Arttuaarnio/PoolPocket/blob/main/images/register.png?raw=true" width="300" />
+<img src="https://github.com/Arttuaarnio/PoolPocket/blob/main/images/home.png?raw=true" width="300" />
+<img src="https://github.com/Arttuaarnio/PoolPocket/blob/main/images/maps.png?raw=true" width="300" />
+<img src="https://github.com/Arttuaarnio/PoolPocket/blob/main/images/favorites.png?raw=true" width="300" />
+<img src="https://github.com/Arttuaarnio/PoolPocket/blob/main/images/chatbot.png?raw=true" width="300" />
+<img src="https://github.com/Arttuaarnio/PoolPocket/blob/main/images/profile.png?raw=true" width="300" />
 
 ## Installation
 

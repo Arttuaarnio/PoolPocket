@@ -112,9 +112,9 @@ const Maps = ({ route }) => {
 
   const getRatingColor = (rating) => {
     if (!rating) return "#888";
-    if (rating < 3) return "#D32F2F";   
-    if (rating < 4) return "#FFC107"; 
-    return "#006F44"; 
+    if (rating < 3) return "#D32F2F";
+    if (rating < 4) return "#FFC107";
+    return "#006F44";
   };
 
   if (isLoading) {
@@ -158,7 +158,6 @@ const Maps = ({ route }) => {
           description={place.vicinity}
         >
           <Callout tooltip={true} onPress={() => saveToFavorites(place)}>
-            {" "}
             <View style={styles.calloutContainer}>
               <View style={styles.callout}>
                 <Text style={styles.calloutTitle}>{place.name}</Text>
@@ -176,9 +175,7 @@ const Maps = ({ route }) => {
                     </Text>
                   </View>
                 )}
-                <Text style={styles.favoriteLabel}>
-                  Add to Favorites
-                </Text>
+                <Text style={styles.favoriteLabel}>Add to Favorites</Text>
               </View>
               <View style={styles.calloutArrow} />
             </View>

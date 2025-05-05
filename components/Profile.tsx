@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { auth, database } from "../configuration/firebaseConfig";
-import { ref, set, remove, get } from "firebase/database";
+import { ref, set, remove, get, update } from "firebase/database";
 import {
   updatePassword,
   deleteUser,
@@ -30,6 +30,7 @@ const Profile = ({ handleLogout }) => {
   const [newPassword, setNewPassword] = useState("");
   const [savingProfile, setSavingProfile] = useState(false);
   const [changingPassword, setChangingPassword] = useState(false);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -39,6 +40,7 @@ const Profile = ({ handleLogout }) => {
           const snapshot = await get(userRef);
           if (snapshot.exists()) {
             const userData = snapshot.val();
+            setUserData(userData); // Store all user data
             setUserInfo({
               username: userData.displayName || "",
               email: userData.email || "",
@@ -69,14 +71,17 @@ const Profile = ({ handleLogout }) => {
     setSavingProfile(true);
 
     try {
+      // Update auth profile
       await updateProfile(auth.currentUser, {
         displayName: userInfo.username,
       });
 
-      await set(ref(database, `users/${userId}`), {
+      const updates = {
         displayName: userInfo.username,
         email: userInfo.email,
-      });
+      };
+
+      await update(ref(database, `users/${userId}`), updates);
 
       Alert.alert("Success", "Profile updated successfully!");
     } catch (error) {

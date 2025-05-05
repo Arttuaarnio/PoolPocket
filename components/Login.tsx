@@ -10,13 +10,13 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../configuration/firebaseConfig"; 
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const auth = getAuth();
 
   const handleLogin = async () => {
     if (!email || !password) {

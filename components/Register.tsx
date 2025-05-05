@@ -10,8 +10,9 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useState } from "react";
-import { getDatabase, ref, set } from "firebase/database";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { ref, set } from "firebase/database";
+import { auth, database } from "../configuration/firebaseConfig";
 
 export default function Register({ navigation }) {
   const [email, setEmail] = useState("");
@@ -19,9 +20,6 @@ export default function Register({ navigation }) {
   const [username, setUsername] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const auth = getAuth();
-  const database = getDatabase();
 
   const validatePassword = (password) => {
     if (password.length < 8) {
@@ -69,7 +67,7 @@ export default function Register({ navigation }) {
 
       // save user data to database
       await set(ref(database, `users/${user.uid}`), {
-        username: username,
+        displayName: username,
         email: email,
       });
 
